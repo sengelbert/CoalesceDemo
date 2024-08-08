@@ -1,0 +1,85 @@
+fileVersion: 1
+id: 617c4890-a373-4f41-b981-40b74de8265e
+name: V_ORDER_MASTER_ITEMS
+operation:
+  config:
+    insertStrategy: UNION
+    selectDistinct: false
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: DEMO
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: f7ed862b-b55a-4e91-b8e5-69e95b55d788
+          stepCounter: 617c4890-a373-4f41-b981-40b74de8265e
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        description: ""
+        name: FORECAST_ORDER_TS
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: e942d33d-fd37-4509-9811-bb64519a95c4
+                stepCounter: 3c697e4a-d0e7-49e5-b82a-6510a2b460a2
+            transform: "\"FCT_ORDER_MASTER\".\"ORDER_TS\"::date"
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: ecb34e8f-e846-4bc6-82ca-a2a6c5b1ea82
+          stepCounter: 617c4890-a373-4f41-b981-40b74de8265e
+        config: {}
+        dataType: NUMBER(38,4)
+        description: ""
+        name: FORECAST_ORDER_AMOUNT
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 0d6fe388-3686-4dd0-9005-c48149d0e39e
+                stepCounter: 3c697e4a-d0e7-49e5-b82a-6510a2b460a2
+            transform: sum("FCT_ORDER_MASTER"."ORDER_AMOUNT")
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 61673cab-4c43-48a6-b195-94143c0b2a3e
+          stepCounter: 617c4890-a373-4f41-b981-40b74de8265e
+        config: {}
+        dataType: VARCHAR(16777216)
+        description: ""
+        name: FORECAST_MENU_ITEM_NAME
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 0d0b2215-58d4-4856-8ad0-c61ee3e140f1
+                stepCounter: d6a08fec-74f9-4ed8-bb5b-db729674ce2e
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: DEMO
+            nodeName: DIM_MENU
+          - locationName: DEMO
+            nodeName: FCT_ORDER_MASTER
+        join:
+          joinCondition: |-
+            FROM {{ ref('DEMO', 'DIM_MENU') }} "DIM_MENU"
+            INNER JOIN {{ ref('DEMO', 'FCT_ORDER_MASTER') }} "FCT_ORDER_MASTER"
+            ON "DIM_MENU"."MENU_ITEM_ID" = "FCT_ORDER_MASTER"."MENU_ITEM_ID"
+            WHERE "ORDER_TS" >= '2022-01-01' and "ITEM_CATEGORY" = 'Beverage'
+            group by ALL
+        name: V_ORDER_MASTER_ITEMS
+        noLinkRefs: []
+  name: V_ORDER_MASTER_ITEMS
+  overrideSQL: false
+  schema: ""
+  sqlType: View
+  type: sql
+  version: 1
+type: Node

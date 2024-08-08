@@ -1,9 +1,15 @@
 fileVersion: 1
 id: "2"
 mappingDefinitions:
+  CUSTOMER:
+    database: ""
+    schema: ""
   DEMO:
     database: DEMO
     schema: TEST
+  POS:
+    database: ""
+    schema: ""
   SAMPLE:
     database: SNOWFLAKE_SAMPLE_DATA
     schema: TPCH_SF1
